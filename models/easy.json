@@ -1,0 +1,8 @@
+{
+  "id": "nahw-mini-easy-v1",
+  "name_ar": "نموذج الأساس",
+  "level": "easy",
+  "description_ar": "للجمل الاسمية والفعلية القصيرة، والفاعل والمفعول به والجار والمجرور.",
+  "rules": ["nominal", "verbal", "subject", "object", "prepositional_phrase"],
+  "offline": true
+}

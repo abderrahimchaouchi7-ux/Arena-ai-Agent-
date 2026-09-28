@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173f36">
+  <meta name="description" content="مِعْراب — محلل نحوي عربي محلي سريع يعمل دون إنترنت">
+  <title>مِعْراب — الإعراب العربي الذكي</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="التنقل والسجل">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">ع</div>
+        <div>
+          <strong>مِعْراب</strong>
+          <span>النحو بوضوح</span>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <button class="nav-item active" type="button" data-view="parser">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5a2.5 2.5 0 0 0 0 5H20M4 5.5v16M8 7h8M8 11h6"/></svg>
+          <span>المحلّل النحوي</span>
+        </button>
+        <button class="nav-item" type="button" id="showGuide">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17h.01M9.1 9a3 3 0 1 1 4.8 2.4c-1.2.9-1.9 1.5-1.9 2.6M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/></svg>
+          <span>دليل الاستخدام</span>
+        </button>
+      </nav>
+
+      <div class="history-block">
+        <div class="section-label">
+          <span>السجل الأخير</span>
+          <button type="button" class="icon-button" id="clearHistory" title="مسح السجل" aria-label="مسح السجل">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3"/></svg>
+          </button>
+        </div>
+        <div id="historyList" class="history-list">
+          <p class="empty-history">ستظهر تحليلاتك هنا</p>
+        </div>
+      </div>
+
+      <div class="offline-card">
+        <span class="status-dot"></span>
+        <div>
+          <strong>يعمل محليًا</strong>
+          <span>لا يُرسل نصك إلى الإنترنت</span>
+        </div>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5zM12 15v2"/></svg>
+      </div>
+      <div class="sidebar-footer">الإصدار <span id="appVersion">1.0.0</span></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="menu-button" type="button" id="menuButton" aria-label="فتح القائمة">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="breadcrumb"><span>مساحة العمل</span><b>/</b><strong>المحلّل النحوي</strong></div>
+        <div class="top-status"><span class="status-dot"></span> جاهز للتحليل</div>
+      </header>
+
+      <div class="workspace">
+        <section class="hero">
+          <div>
+            <span class="eyebrow">محرّك عربي متخصص · يعمل دون اتصال</span>
+            <h1>أَعْرِبْها بثقة،<br><em>وافهمْها بوضوح.</em></h1>
+            <p>ثلاثة نماذج نحوية مصغّرة تحلّل بنية الجملة، وتشرح موقع كل كلمة وعلامة إعرابها في أجزاء من الثانية.</p>
+          </div>
+          <div class="hero-ornament" aria-hidden="true">
+            <div class="ornament-ring"></div>
+            <span>ض</span>
+            <i>ُ</i><b>ِ</b><em>َ</em>
+          </div>
+        </section>
+
+        <section class="composer-card" aria-labelledby="composerTitle">
+          <div class="composer-head">
+            <div>
+              <span class="step-number">01</span>
+              <div><h2 id="composerTitle">اكتب الجملة المراد إعرابها</h2><p>يمكنك إدخال جملة مشكولة أو غير مشكولة</p></div>
+            </div>
+            <div class="character-count"><span id="charCount">0</span> / 1000</div>
+          </div>
+
+          <div class="textarea-wrap">
+            <textarea id="sentenceInput" maxlength="1000" rows="4" autofocus spellcheck="false" placeholder="مثال: إنَّ العلمَ نورٌ يهدي العقولَ..."></textarea>
+            <button type="button" class="clear-input" id="clearInput" aria-label="مسح النص" title="مسح النص">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+            </button>
+          </div>
+
+          <div class="examples-row">
+            <span>أمثلة سريعة</span>
+            <div id="examplesList" class="example-chips">
+              <button type="button" data-example="كتبَ الطالبُ الدرسَ.">كتبَ الطالبُ الدرسَ</button>
+              <button type="button" data-example="إنَّ العلمَ نورٌ.">إنَّ العلمَ نورٌ</button>
+              <button type="button" data-example="إنْ تجتهدْ تنجحْ.">إنْ تجتهدْ تنجحْ</button>
+            </div>
+          </div>
+
+          <div class="composer-footer">
+            <fieldset class="level-picker">
+              <legend>مستوى النموذج</legend>
+              <label><input type="radio" name="level" value="auto" checked><span>تلقائي <small>موصى به</small></span></label>
+              <label><input type="radio" name="level" value="easy"><span>سهل</span></label>
+              <label><input type="radio" name="level" value="medium"><span>متوسط</span></label>
+              <label><input type="radio" name="level" value="hard"><span>متقدم</span></label>
+            </fieldset>
+            <button type="button" class="analyze-button" id="analyzeButton">
+              <span>ابدأ الإعراب</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              <kbd>Ctrl ↵</kbd>
+            </button>
+          </div>
+        </section>
+
+        <section id="resultsSection" class="results-section" aria-live="polite" hidden>
+          <div class="results-heading">
+            <div>
+              <span class="step-number">02</span>
+              <div><h2>نتيجة التحليل</h2><p id="resultSubline">تحليل الجملة كلمةً كلمة</p></div>
+            </div>
+            <div class="result-actions">
+              <button type="button" class="secondary-button" id="copyResult">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v13H8zM5 16H3V3h11v2"/></svg> نسخ النتيجة
+              </button>
+              <button type="button" class="secondary-button" id="exportResult">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg> تصدير JSON
+              </button>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <article><span>نوع الجملة</span><strong id="sentenceType">—</strong></article>
+            <article><span>النموذج المختار</span><strong id="modelName">—</strong></article>
+            <article><span>درجة الثقة</span><strong id="confidenceValue">—</strong><div class="confidence-track"><i id="confidenceBar"></i></div></article>
+            <article><span>زمن التحليل</span><strong id="elapsedValue">—</strong></article>
+          </div>
+
+          <div class="summary-card">
+            <div class="summary-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+            </div>
+            <div><span>الخلاصة النحوية</span><p id="summaryText"></p></div>
+          </div>
+
+          <div id="notesBox" class="notes-box" hidden></div>
+
+          <div class="tokens-panel">
+            <div class="panel-head">
+              <div><h3>إعراب الكلمات</h3><span id="tokenCount">0 كلمات</span></div>
+              <span class="swipe-hint">مرّر أفقيًا لرؤية التفاصيل</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>الكلمة</th><th>النوع</th><th>الموقع الإعرابي</th><th>الحالة</th><th>علامة الإعراب والتفسير</th><th>الثقة</th></tr></thead>
+                <tbody id="tokensBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="features-strip" id="featuresStrip">
+          <article><span>01</span><div><strong>محلي بالكامل</strong><p>النص يبقى على جهازك دائمًا</p></div></article>
+          <article><span>02</span><div><strong>ثلاثة مستويات</strong><p>من الأساسيات إلى التراكيب المتقدمة</p></div></article>
+          <article><span>03</span><div><strong>شرح لا نتيجة فقط</strong><p>الموقع والعامل والعلامة لكل كلمة</p></div></article>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="guideDialog">
+    <div class="dialog-head"><div><span>دليل سريع</span><h2>كيف تستخدم مِعْراب؟</h2></div><button type="button" id="closeGuide" aria-label="إغلاق">×</button></div>
+    <ol class="guide-steps">
+      <li><b>1</b><div><strong>اكتب جملة تامة</strong><p>كلما كان السياق أوضح، تحسن الترجيح بين الأوجه النحوية.</p></div></li>
+      <li><b>2</b><div><strong>اترك المستوى «تلقائي»</strong><p>سيختار المحرك النموذج السهل أو المتوسط أو المتقدم بحسب التركيب.</p></div></li>
+      <li><b>3</b><div><strong>راجع النتيجة</strong><p>يعرض الجدول نوع كل كلمة، وموقعها، وحالتها، وعلامة إعرابها.</p></div></li>
+    </ol>
+    <div class="guide-note"><strong>تنبيه علمي</strong><p>قد يحتمل النص العربي غير المشكول أكثر من وجه صحيح. عند ظهور تنبيه، أضف الحركات أو وسّع السياق.</p></div>
+  </dialog>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>

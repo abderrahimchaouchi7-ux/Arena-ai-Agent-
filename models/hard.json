@@ -1,0 +1,8 @@
+{
+  "id": "nahw-mini-hard-v1",
+  "name_ar": "نموذج التراكيب المتقدمة",
+  "level": "hard",
+  "description_ar": "يضيف الشرط والاستثناء والنداء والجمل المتداخلة وعلامات الإعراب الفرعية.",
+  "rules": ["nominal", "verbal", "subject", "object", "prepositional_phrase", "inna", "kana", "adjective", "conjunction", "idafa", "subjunctive", "jussive", "conditional", "exception", "vocative", "relative", "advanced_signs"],
+  "offline": true
+}

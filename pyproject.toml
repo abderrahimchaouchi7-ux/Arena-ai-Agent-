@@ -1,0 +1,17 @@
+[project]
+name = "mi3rab-offline"
+version = "1.0.0"
+description = "محلل نحوي عربي محلي سريع بثلاثة نماذج متدرجة"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Mi3rab contributors" }]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+exclude = ["dist", "build"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+ignore = ["E501"]

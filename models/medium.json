@@ -1,0 +1,8 @@
+{
+  "id": "nahw-mini-medium-v1",
+  "name_ar": "نموذج التراكيب",
+  "level": "medium",
+  "description_ar": "يضيف النواسخ والنعت والعطف والإضافة ونواصب المضارع وجوازمه.",
+  "rules": ["nominal", "verbal", "subject", "object", "prepositional_phrase", "inna", "kana", "adjective", "conjunction", "idafa", "subjunctive", "jussive"],
+  "offline": true
+}
