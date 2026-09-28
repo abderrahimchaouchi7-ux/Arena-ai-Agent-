@@ -24,7 +24,7 @@ on:
       - "Mi3rab.spec"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -32,10 +32,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
@@ -50,6 +50,27 @@ jobs:
       - name: Build Mi3rab.exe
         run: pyinstaller --noconfirm --clean Mi3rab.spec
 
+      - name: Smoke-test packaged application
+        shell: pwsh
+        run: |
+          $app = Start-Process -FilePath "dist/Mi3rab.exe" -ArgumentList "--serve", "--host", "127.0.0.1", "--port", "8765" -PassThru
+          try {
+            $ready = $false
+            for ($attempt = 0; $attempt -lt 30; $attempt++) {
+              Start-Sleep -Seconds 1
+              try {
+                $health = Invoke-RestMethod -Uri "http://127.0.0.1:8765/api/health" -TimeoutSec 2
+                if ($health.ok -eq $true) { $ready = $true; break }
+              } catch { }
+            }
+            if (-not $ready) { throw "The packaged application did not become ready." }
+            $body = @{ text = "إن العلم نور"; level = "auto" } | ConvertTo-Json
+            $result = Invoke-RestMethod -Method Post -Uri "http://127.0.0.1:8765/api/parse" -ContentType "application/json; charset=utf-8" -Body $body
+            if ($result.tokens.Count -lt 3) { throw "The packaged parser returned an invalid result." }
+          } finally {
+            Stop-Process -Id $app.Id -Force -ErrorAction SilentlyContinue
+          }
+
       - name: Create checksum
         shell: pwsh
         run: |
@@ -57,7 +78,7 @@ jobs:
           "$hash  Mi3rab.exe" | Out-File -Encoding ascii dist/SHA256SUMS.txt
 
       - name: Upload Windows application
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Mi3rab-Windows-x64
           path: |
@@ -65,3 +86,15 @@ jobs:
             dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish version 1.0.0
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "v1.0.0" *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create "v1.0.0" --target $env:GITHUB_SHA --title "مِعْراب 1.0.0 — Windows" --notes "نسخة Windows x64 تعمل دون إنترنت. نزّل Mi3rab.exe، ثم طابق بصمة SHA-256 عند الحاجة."
+          }
+          gh release upload "v1.0.0" "dist/Mi3rab.exe" "dist/SHA256SUMS.txt" --clobber
