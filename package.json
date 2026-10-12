@@ -11,7 +11,6 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "tsc --noEmit",
     "data:build": "node scripts/build-data.mjs",
     "data:verify": "node scripts/verify-data.mjs",
     "android:sync": "npm run build && npx cap sync android",
