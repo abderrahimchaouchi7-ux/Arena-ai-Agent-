@@ -21,7 +21,7 @@ function go(hash: string) {
 async function renderAt(hash: string) {
   go(hash);
   const view = render(<App />);
-  // Suspense boundaries resolve on a microtask; wait for the shell.
+  // The route is lazy, so the shell appears only after its chunk resolves.
   await waitFor(() => expect(screen.getAllByRole('link').length).toBeGreaterThan(0));
   return view;
 }
@@ -68,21 +68,16 @@ describe('navigation', () => {
         go(hash);
       });
       // Each page must produce a heading; a crash would throw instead.
-      await waitFor(
-        () => {
-          const main = screen.getByRole('main');
-          expect(within(main).getAllByText(/.+/).length).toBeGreaterThan(0);
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        const main = screen.getByRole('main');
+        expect(within(main).getAllByText(/.+/).length).toBeGreaterThan(0);
+      });
     }
   });
 
   it('shows the not-found page for an unknown route', async () => {
     await renderAt('/does-not-exist');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument(), {
-      timeout: 5000,
-    });
+    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
     expect(screen.getByRole('main').textContent).toMatch(/not found|404|لم|introuvable/i);
   });
 
@@ -96,7 +91,7 @@ describe('navigation', () => {
     act(() => {
       fireEvent.click(link!);
     });
-    await waitFor(() => expect(window.location.hash).toBe('#/prayer-times'), { timeout: 5000 });
+    await waitFor(() => expect(window.location.hash).toBe('#/prayer-times'));
   });
 });
 
@@ -108,11 +103,11 @@ describe('prayer times journey', () => {
       for (const name of ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']) {
         expect(within(main).getByText(name)).toBeInTheDocument();
       }
-    }, { timeout: 8000 });
+    });
     // A real h:mm must be rendered for at least one prayer.
     await waitFor(() => {
       expect(screen.getByRole('main').textContent).toMatch(/\d{1,2}:\d{2}\s?[AP]M/i);
-    }, { timeout: 8000 });
+    });
   });
 
   it('shows a live countdown to the next prayer', async () => {
@@ -120,7 +115,7 @@ describe('prayer times journey', () => {
     await waitFor(() => {
       const main = screen.getByRole('main');
       expect(main.textContent).toMatch(/\d{1,2}:\d{2}:\d{2}/);
-    }, { timeout: 8000 });
+    });
   });
 });
 
@@ -130,7 +125,7 @@ describe('Quran journey', () => {
     await waitFor(() => {
       const main = screen.getByRole('main');
       expect(within(main).getAllByRole('link').length).toBeGreaterThanOrEqual(114);
-    }, { timeout: 8000 });
+    });
     const main = screen.getByRole('main');
     expect(within(main).getByText('Al-Faatiha')).toBeInTheDocument();
     expect(within(main).getByText('An-Naas')).toBeInTheDocument();
@@ -141,7 +136,7 @@ describe('Quran journey', () => {
     await waitFor(() => {
       const arabic = document.querySelectorAll('[dir="rtl"]');
       expect(arabic.length).toBeGreaterThan(0);
-    }, { timeout: 8000 });
+    });
     // Al-Ikhlas has exactly 4 verses.
     const main = screen.getByRole('main');
     expect(main.textContent).toContain('Al-Ikhlaas');
@@ -152,7 +147,7 @@ describe('Quran journey', () => {
     await waitFor(() => {
       const main = screen.getByRole('main');
       expect(main.textContent ?? '').toContain('Al-Ikhlaas');
-    }, { timeout: 8000 });
+    });
     const main = screen.getByRole('main');
     const bare = (main.textContent ?? '')
       .replace(/[\u064B-\u065F\u0670]/g, '')
@@ -165,7 +160,7 @@ describe('Quran journey', () => {
 describe('language and theme persistence', () => {
   it('mirrors the document for Arabic and persists the choice', async () => {
     await renderAt('/settings');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument(), { timeout: 8000 });
+    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
     act(() => {
       useSettings.getState().setLanguage('ar');
     });
@@ -184,14 +179,14 @@ describe('language and theme persistence', () => {
       JSON.stringify({
         state: { ...useSettings.getState(), language: 'fr', theme: 'dark', mode: 'dark' },
         version: 1,
-      }),
+      })
     );
     useSettings.persist.rehydrate();
     render(<App />);
     await waitFor(() => {
       expect(document.documentElement.getAttribute('lang')).toBe('fr');
       expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
-    }, { timeout: 8000 });
+    });
   });
 
   it('applies the chosen theme and mode to the document', async () => {
@@ -212,7 +207,7 @@ describe('language and theme persistence', () => {
 describe('bookmarks journey', () => {
   it('shows an empty state before anything is saved', async () => {
     await renderAt('/bookmarks');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument(), { timeout: 8000 });
+    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
     expect(screen.getByRole('main').textContent?.trim().length).toBeGreaterThan(0);
   });
 
@@ -228,7 +223,7 @@ describe('bookmarks journey', () => {
     await renderAt('/bookmarks');
     await waitFor(() => {
       expect(screen.getByRole('main').textContent).toContain('Al-Ikhlas');
-    }, { timeout: 8000 });
+    });
   });
 });
 
@@ -245,7 +240,7 @@ describe('accessibility and states', () => {
 
   it('gives every icon-only control an accessible name', async () => {
     await renderAt('/adhan');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument(), { timeout: 8000 });
+    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBeGreaterThan(0);
     for (const button of buttons) {
@@ -269,7 +264,7 @@ describe('error and offline handling', () => {
     await renderAt('/prayer-times');
     await waitFor(() => {
       expect(screen.getByRole('main').textContent).toMatch(/\d{1,2}:\d{2}/);
-    }, { timeout: 8000 });
+    });
   });
 });
 
@@ -281,6 +276,6 @@ describe('qibla journey', () => {
       // Makkah -> the bearing is undefined-ish at the Kaaba itself, so assert
       // the page explains the sensor situation instead of faking a heading.
       expect(main.textContent ?? '').toMatch(/°|compass|sensor|بوصلة|Capteur/i);
-    }, { timeout: 8000 });
+    });
   });
 });

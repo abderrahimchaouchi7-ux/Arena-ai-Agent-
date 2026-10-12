@@ -1,6 +1,18 @@
 import '@testing-library/jest-dom/vitest';
 import { afterEach, vi } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
+
+/**
+ * Testing Library's default `waitFor` budget is 1000ms. That is enough on an
+ * idle machine but not for this suite, which renders the whole app through
+ * Suspense boundaries and waits for lazy route chunks to resolve. On a 2-CPU
+ * box the suite then fails intermittently for reasons that have nothing to do
+ * with the code under test.
+ *
+ * Raise the default once here rather than passing a timeout at every call site,
+ * so a new test cannot silently reintroduce the flake.
+ */
+configure({ asyncUtilTimeout: 10000 });
 
 afterEach(() => {
   cleanup();
