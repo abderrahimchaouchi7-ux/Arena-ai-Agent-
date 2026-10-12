@@ -1,0 +1,424 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ======================================================================
+   Design tokens — one block per theme x mode.
+   Colours are stored as "r g b" triples so Tailwind can apply alpha:
+   rgb(var(--c-primary) / 0.2)
+   ====================================================================== */
+
+:root,
+[data-theme='classic'][data-mode='light'] {
+  --c-bg: 247 245 239;
+  --c-surface: 255 255 255;
+  --c-surface-2: 242 239 230;
+  --c-border: 224 218 203;
+  --c-fg: 26 32 30;
+  --c-muted: 108 112 106;
+  --c-primary: 11 61 51;
+  --c-primary-fg: 250 248 240;
+  --c-accent: 176 141 60;
+  --c-success: 22 101 52;
+  --c-warning: 161 98 7;
+  --c-danger: 153 27 27;
+  --ornament-opacity: 0.055;
+}
+
+[data-theme='classic'][data-mode='dark'] {
+  --c-bg: 14 22 20;
+  --c-surface: 22 33 30;
+  --c-surface-2: 30 43 39;
+  --c-border: 48 63 58;
+  --c-fg: 236 234 224;
+  --c-muted: 158 166 158;
+  --c-primary: 45 138 111;
+  --c-primary-fg: 8 16 14;
+  --c-accent: 201 165 84;
+  --c-success: 74 178 116;
+  --c-warning: 217 155 45;
+  --c-danger: 231 96 96;
+  --ornament-opacity: 0.05;
+}
+
+[data-theme='dark'][data-mode='light'] {
+  --c-bg: 236 238 242;
+  --c-surface: 249 250 252;
+  --c-surface-2: 226 230 237;
+  --c-border: 205 211 221;
+  --c-fg: 17 24 33;
+  --c-muted: 90 99 112;
+  --c-primary: 24 42 66;
+  --c-primary-fg: 244 246 250;
+  --c-accent: 161 122 46;
+  --c-success: 21 96 62;
+  --c-warning: 154 96 12;
+  --c-danger: 149 30 42;
+  --ornament-opacity: 0.03;
+}
+
+/* Theme B — Dark Premium: charcoal / midnight, muted gold highlights. */
+[data-theme='dark'][data-mode='dark'] {
+  --c-bg: 12 14 18;
+  --c-surface: 20 23 29;
+  --c-surface-2: 28 32 40;
+  --c-border: 44 49 60;
+  --c-fg: 233 236 241;
+  --c-muted: 148 155 168;
+  --c-primary: 196 164 92;
+  --c-primary-fg: 18 16 10;
+  --c-accent: 94 178 148;
+  --c-success: 76 175 128;
+  --c-warning: 219 168 58;
+  --c-danger: 229 100 100;
+  --ornament-opacity: 0.045;
+}
+
+/* Theme C — Minimal Modern: neutral, generous whitespace. */
+[data-theme='minimal'][data-mode='light'] {
+  --c-bg: 250 250 250;
+  --c-surface: 255 255 255;
+  --c-surface-2: 244 244 245;
+  --c-border: 228 228 231;
+  --c-fg: 24 24 27;
+  --c-muted: 113 113 122;
+  --c-primary: 24 24 27;
+  --c-primary-fg: 250 250 250;
+  --c-accent: 13 148 136;
+  --c-success: 22 128 74;
+  --c-warning: 180 110 12;
+  --c-danger: 190 40 40;
+  --ornament-opacity: 0;
+}
+
+[data-theme='minimal'][data-mode='dark'] {
+  --c-bg: 17 17 19;
+  --c-surface: 26 26 29;
+  --c-surface-2: 36 36 40;
+  --c-border: 52 52 58;
+  --c-fg: 242 242 243;
+  --c-muted: 152 152 160;
+  --c-primary: 236 236 238;
+  --c-primary-fg: 20 20 22;
+  --c-accent: 45 212 191;
+  --c-success: 74 190 128;
+  --c-warning: 222 170 62;
+  --c-danger: 235 100 100;
+  --ornament-opacity: 0;
+}
+
+/* Theme D — Contemporary Blue: navy + soft blue. */
+[data-theme='blue'][data-mode='light'] {
+  --c-bg: 240 245 251;
+  --c-surface: 255 255 255;
+  --c-surface-2: 228 238 249;
+  --c-border: 205 221 240;
+  --c-fg: 15 30 52;
+  --c-muted: 88 108 134;
+  --c-primary: 26 66 122;
+  --c-primary-fg: 245 249 255;
+  --c-accent: 20 132 199;
+  --c-success: 17 116 88;
+  --c-warning: 176 110 12;
+  --c-danger: 176 42 55;
+  --ornament-opacity: 0.035;
+}
+
+[data-theme='blue'][data-mode='dark'] {
+  --c-bg: 9 15 26;
+  --c-surface: 15 24 40;
+  --c-surface-2: 22 33 53;
+  --c-border: 38 53 80;
+  --c-fg: 226 234 245;
+  --c-muted: 143 158 182;
+  --c-primary: 88 152 232;
+  --c-primary-fg: 8 14 24;
+  --c-accent: 96 190 220;
+  --c-success: 62 178 138;
+  --c-warning: 216 164 62;
+  --c-danger: 232 104 108;
+  --ornament-opacity: 0.04;
+}
+
+/* Theme E — Warm Sand: sand, cream, muted brown. */
+[data-theme='sand'][data-mode='light'] {
+  --c-bg: 250 245 236;
+  --c-surface: 255 252 246;
+  --c-surface-2: 242 232 214;
+  --c-border: 224 208 182;
+  --c-fg: 56 42 28;
+  --c-muted: 133 114 92;
+  --c-primary: 122 82 48;
+  --c-primary-fg: 255 250 240;
+  --c-accent: 90 122 92;
+  --c-success: 74 116 62;
+  --c-warning: 168 110 26;
+  --c-danger: 158 54 44;
+  --ornament-opacity: 0.05;
+}
+
+[data-theme='sand'][data-mode='dark'] {
+  --c-bg: 26 21 16;
+  --c-surface: 36 29 23;
+  --c-surface-2: 47 38 30;
+  --c-border: 66 54 43;
+  --c-fg: 240 231 218;
+  --c-muted: 172 156 138;
+  --c-primary: 205 152 96;
+  --c-primary-fg: 30 22 14;
+  --c-accent: 142 176 140;
+  --c-success: 116 168 104;
+  --c-warning: 214 158 62;
+  --c-danger: 224 106 92;
+  --ornament-opacity: 0.045;
+}
+
+/* ---- Accent overrides (user-picked, applied on top of the theme) ---- */
+[data-accent='emerald'] { --c-accent: 16 148 116; }
+[data-accent='gold'] { --c-accent: 186 145 58; }
+[data-accent='teal'] { --c-accent: 13 148 152; }
+[data-accent='blue'] { --c-accent: 45 116 208; }
+[data-accent='rose'] { --c-accent: 190 68 96; }
+[data-accent='violet'] { --c-accent: 122 88 196; }
+[data-mode='dark'][data-accent='emerald'] { --c-accent: 52 200 158; }
+[data-mode='dark'][data-accent='gold'] { --c-accent: 214 176 92; }
+[data-mode='dark'][data-accent='teal'] { --c-accent: 56 196 200; }
+[data-mode='dark'][data-accent='blue'] { --c-accent: 104 162 244; }
+[data-mode='dark'][data-accent='rose'] { --c-accent: 236 116 142; }
+[data-mode='dark'][data-accent='violet'] { --c-accent: 168 136 236; }
+
+/* ============================== Typography ============================== */
+
+:root {
+  --font-ui: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans Arabic', sans-serif;
+  --font-arabic: 'Noto Naskh Arabic', 'Geeza Pro', 'Traditional Arabic',
+    'Amiri', 'Scheherazade New', serif;
+  --font-quran: 'Scheherazade New', 'Amiri Quran', 'Amiri',
+    'Noto Naskh Arabic', 'Traditional Arabic', serif;
+  --quran-font-size: 30px;
+}
+
+html[dir='rtl'] {
+  --font-ui: 'Noto Sans Arabic', 'Inter', 'Segoe UI', Tahoma, sans-serif;
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  html[data-mode='dark'] {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg text-fg font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    /* Prevents rubber-band overscroll hiding the sticky header on Android. */
+    overscroll-behavior-y: none;
+    min-height: 100dvh;
+  }
+
+  /* Visible, theme-aware focus ring everywhere (a11y requirement). */
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-accent));
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  ::selection {
+    background: rgb(var(--c-accent) / 0.28);
+  }
+
+  /* Scrollbars follow the theme instead of the OS default. */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-border));
+    border-radius: 999px;
+    border: 2px solid rgb(var(--c-bg));
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-muted) / 0.6); }
+}
+
+@layer components {
+  .app-shell {
+    @apply mx-auto w-full max-w-6xl px-3 pb-28 pt-3 sm:px-5 md:pb-10;
+  }
+
+  .card {
+    @apply rounded-xl2 border border-border bg-surface shadow-card;
+  }
+
+  .surface-2 {
+    @apply rounded-xl border border-border bg-surface-2;
+  }
+
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded-lg px-4 py-2.5
+      text-sm font-semibold transition-[transform,background-color,color,box-shadow]
+      duration-150 ease-smooth active:scale-[0.97]
+      disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-fg hover:opacity-90;
+  }
+
+  .btn-accent {
+    @apply btn bg-accent text-primary-fg hover:opacity-90;
+  }
+
+  .btn-outline {
+    @apply btn border border-border bg-transparent text-fg hover:bg-surface-2;
+  }
+
+  .btn-ghost {
+    @apply btn bg-transparent text-muted hover:bg-surface-2 hover:text-fg;
+  }
+
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .btn-lg { @apply px-5 py-3 text-base; }
+
+  .icon-btn {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-lg text-muted
+      transition-colors duration-150 hover:bg-surface-2 hover:text-fg active:scale-95;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-border
+      bg-surface-2 px-3 py-1 text-xs font-medium text-muted;
+  }
+
+  .chip-active {
+    @apply border-accent/50 bg-accent/10 text-fg;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-sm
+      text-fg placeholder:text-muted/70 transition-colors
+      focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-muted;
+  }
+
+  .divider {
+    @apply h-px w-full bg-border;
+  }
+
+  .arabic-text {
+    @apply font-arabic leading-[2.1] text-right;
+    direction: rtl;
+  }
+
+  .quran-text {
+    @apply font-quran text-right;
+    direction: rtl;
+    font-size: var(--quran-font-size);
+    line-height: 2.25;
+    word-spacing: 0.08em;
+  }
+
+  .verse-end {
+    @apply mx-1 inline-flex select-none items-center justify-center align-middle
+      text-[0.62em] font-sans text-accent;
+  }
+
+  .section-title {
+    @apply text-lg font-bold tracking-tight;
+  }
+
+  .skeleton {
+    @apply relative overflow-hidden rounded-lg bg-surface-2;
+  }
+
+  .skeleton::after {
+    @apply absolute inset-0 -translate-x-full animate-shimmer;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(var(--c-fg) / 0.06),
+      transparent
+    );
+  }
+
+  /* Subtle Islamic geometric backdrop, used sparingly and disabled by the
+     "minimal" theme via --ornament-opacity: 0. */
+  .ornament {
+    position: relative;
+  }
+
+  .ornament::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: var(--ornament-opacity);
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M28 2 54 28 28 54 2 28z'/%3E%3Cpath d='M28 12 44 28 28 44 12 28z'/%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 56px 56px;
+  }
+
+  [data-mode='dark'] .ornament::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M28 2 54 28 28 54 2 28z'/%3E%3Cpath d='M28 12 44 28 28 44 12 28z'/%3E%3Ccircle cx='28' cy='28' r='6'/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .safe-top { padding-top: env(safe-area-inset-top, 0px); }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+  .text-balance { text-wrap: balance; }
+  .ltr { direction: ltr; }
+  .rtl { direction: rtl; }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* ============================= Animations =============================== */
+
+.page-enter {
+  animation: page-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after { animation: none; }
+  .page-enter { animation: none; }
+}
+
+/* ============================ Theme transition ========================== */
+
+body.theme-transitioning,
+body.theme-transitioning * {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    border-color 220ms ease !important;
+}
+
+@media print {
+  .no-print { display: none !important; }
+}

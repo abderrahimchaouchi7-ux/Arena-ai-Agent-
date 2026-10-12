@@ -27,9 +27,28 @@ render.experimental.xml
 # Keystore files
 *.jks
 *.keystore
+*.p12
+keystore.properties
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
 
 # Android Profiling
 *.hprof
+
+# Capacitor: `npx cap sync` copies dist/ here, so it is build output.
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+
+# Node / build
+node_modules/
+dist/
+dist-ssr/
+*.local
+.env
+.env.*
+!.env.example
+.data-cache/
+coverage/
+.vite/
+stats.html

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="classic" data-mode="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b3d33" />
+    <meta
+      name="description"
+      content="Nur Al-Iman — prayer times, Adhan, the Holy Quran, Du'a, Adhkar, Hadith and Qibla. Offline-first, in Arabic, French and English."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./pwa-192x192.png" />
+
+    <!--
+      Webfonts are progressive enhancement only. Every font family below has a
+      system fallback in index.css, so the app still renders correctly offline
+      and inside the Android WebView with no network.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Inter:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Scheherazade+New:wght@400;700&display=swap"
+    />
+
+    <title>Nur Al-Iman — Islamic Companion</title>
+
+    <!--
+      Applies the persisted theme before first paint so there is no white flash
+      and no flash of the wrong direction (LTR -> RTL) on Arabic.
+    -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('nur-settings');
+          var s = raw ? JSON.parse(raw) : null;
+          var state = (s && s.state) || {};
+          var root = document.documentElement;
+          var theme = state.theme || 'classic';
+          var accent = state.accent || 'gold';
+          var mode = state.mode || 'light';
+          if (mode === 'auto') {
+            mode = window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light';
+          }
+          var lang = state.language || navigator.language?.slice(0, 2) || 'en';
+          if (!['ar', 'fr', 'en'].includes(lang)) lang = 'en';
+          root.setAttribute('data-theme', theme);
+          root.setAttribute('data-accent', accent);
+          root.setAttribute('data-mode', mode);
+          root.setAttribute('lang', lang);
+          root.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+          root.style.setProperty('--quran-font-size', (state.quranFontSize || 30) + 'px');
+          if (mode === 'dark') root.classList.add('dark');
+        } catch (e) {
+          /* fall back to the defaults already in the markup */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

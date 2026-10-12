@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nur Al-Iman</string>
+    <string name="title_activity_main">Nur Al-Iman</string>
+    <string name="package_name">org.nuraliman.app</string>
+    <string name="custom_url_scheme">org.nuraliman.app</string>
+
+    <!-- Notification channels. Names are shown in Android system settings. -->
+    <string name="channel_prayer_times">Prayer times</string>
+    <string name="channel_prayer_times_description">Alerts at Fajr, Dhuhr, Asr, Maghrib and Isha.</string>
+    <string name="channel_prayer_reminders">Pre-prayer reminders</string>
+    <string name="channel_prayer_reminders_description">Quiet reminders a few minutes before a prayer.</string>
+</resources>

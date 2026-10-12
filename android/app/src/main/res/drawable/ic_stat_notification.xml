@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Status-bar notification icon for prayer alerts.
+
+  Android draws this as a white silhouette from the alpha channel only, so the
+  vector must be a single opaque shape on a transparent background. Colour is
+  supplied by the channel / LocalNotifications `iconColor`, not by this file.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Crescent: outer arc minus an offset disc. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M14.2,2.6a9.4,9.4 0 1,0 0,18.8 10.5,10.5 0 0,1 0,-18.8Z" />
+
+    <!-- Eight-pointed star: two overlapping squares. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16.6,9.2h4.2v4.2h-4.2z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M18.7,8.4l2.97,2.97l-2.97,2.97l-2.97,-2.97z" />
+</vector>

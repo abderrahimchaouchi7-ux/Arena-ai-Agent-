@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Nur Al-Iman">
+  <rect width="64" height="64" rx="14" fill="#0F1720" />
+  <!-- Crescent: a full disc minus an offset disc, drawn as one path. -->
+  <path
+    d="M40.6 12.2a20 20 0 1 0 0 39.6 22.4 22.4 0 0 1 0-39.6Z"
+    fill="#C9A227"
+  />
+  <!-- Eight-pointed star: two overlapping squares rotated 45 degrees. -->
+  <g fill="#C9A227">
+    <rect x="41.4" y="26.4" width="11.2" height="11.2" />
+    <rect x="41.4" y="26.4" width="11.2" height="11.2" transform="rotate(45 47 32)" />
+  </g>
+</svg>
