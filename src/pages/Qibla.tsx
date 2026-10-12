@@ -329,7 +329,7 @@ export default function QiblaPage() {
             functional without pulling in a tile dependency the app can't honour.
           */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-border bg-surface-2">
-            <MapPlaceholder bearing={bearing} />
+            <BearingSchematic bearing={bearing} />
           </div>
           <a
             href={mapUrl}
@@ -351,10 +351,14 @@ export default function QiblaPage() {
 }
 
 /**
- * Offline map placeholder: draws the great-circle direction as a schematic
- * rather than pretending to show real tiles. Clearly labelled as such.
+ * Offline bearing schematic.
+ *
+ * This is deliberately not a map: real tiles need the network, which the
+ * offline-first guarantee cannot honour. It draws the computed great-circle
+ * bearing as a labelled compass diagram, and the OpenStreetMap link below
+ * gives the user a real map when they are online.
  */
-function MapPlaceholder({ bearing }: { bearing: number }) {
+function BearingSchematic({ bearing }: { bearing: number }) {
   const { t } = useTranslation();
   return (
     <div className="absolute inset-0 flex items-center justify-center">
