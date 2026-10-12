@@ -18,7 +18,7 @@ Gradle and no Android SDK** — so no APK was built, signed or tested. See point
 | 7 | Hadith and du'a sources are traceable | `npm run data:verify` | **Pass** — every adhkar item sourced; upstream commits pinned |
 | 8 | Qibla bearing is correct | `npm test` → `src/lib/qibla.test.ts` | **Pass** — 36 tests vs independently computed fixtures |
 | 9 | Theme and language persist | `npm test` → *language and theme persistence* | **Pass** — survives rehydration from `localStorage` |
-| 10 | Content is available offline | `npm run build` | **Pass** — service worker precaches 50 entries (~8.2 MB) |
+| 10 | Content is available offline | `npm run build` | **Pass** — service worker precaches 58 entries (~8.5 MB) |
 | 11 | The layout is responsive | `npm run dev` | **Not verified** — no browser in this environment |
 | 12 | The Android build is documented | `docs/ANDROID.md` | **Pass** — project present; **no APK built, signed or tested** |
 | 13 | Accessibility, empty and error states | `npm test` → *accessibility and states* | **Pass** — skip link, landmarks, named controls, no emoji in nav |
@@ -127,7 +127,7 @@ language and theme are restored.
 npm run build
 ```
 
-Reports `precache 50 entries (8248.41 KiB)` and generates `dist/sw.js`. Quran
+Reports `precache 58 entries (8547.76 KiB)` and generates `dist/sw.js`. Quran
 translations and hadith packs use cache-first routes and are cached on first use.
 
 Prayer-time calculation, Qibla bearing, Hijri conversion and all bundled content

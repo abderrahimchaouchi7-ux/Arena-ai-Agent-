@@ -136,7 +136,7 @@ npm run build
 
 The app uses `HashRouter` and a relative `base: './'`, so it also works from
 `file://` inside the Android WebView and from a sub-path without extra config.
-A service worker precaches 50 entries (~8.2 MB) for offline use; Quran
+A service worker precaches 58 entries (~8.5 MB) for offline use; Quran
 translations and hadith packs are cached on first use.
 
 **HTTPS is required** for geolocation, notifications and the service worker. On
