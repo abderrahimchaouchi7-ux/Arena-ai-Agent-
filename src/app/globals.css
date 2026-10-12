@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eefbf7;
+  --color-brand-100: #d5f5ec;
+  --color-brand-200: #aeead9;
+  --color-brand-500: #14a085;
+  --color-brand-600: #0f8672;
+  --color-brand-700: #0c6b5c;
+  --color-brand-800: #0a564b;
+  --color-brand-900: #08473d;
+
+  --color-ink-900: #12211f;
+  --color-ink-700: #2c3b39;
+  --color-ink-500: #5b6b68;
+  --color-ink-300: #9aa8a5;
+
+  --color-star: #f0a500;
+  --color-danger: #b3261e;
+
+  --font-sans: "Segoe UI", "Noto Sans Arabic", "Noto Naskh Arabic", system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  /* Larger base type + generous spacing: the audience may have low literacy
+     and often uses the site outdoors on a phone. */
+  font-size: 18px;
+  line-height: 1.55;
+  background: #f6f8f7;
+  color: var(--color-ink-900);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior-y: none;
+}
+
+/* Every interactive element gets a 48px+ touch target. */
+button,
+a,
+[role="button"],
+input,
+select,
+textarea {
+  min-height: 48px;
+}
+
+input,
+select,
+textarea {
+  font-size: 1rem;
+}
+
+/* Arabic gets a font with proper shaping and slightly looser leading. */
+html[dir="rtl"] body {
+  font-family: "Noto Naskh Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+  line-height: 1.75;
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl border border-black/5 shadow-sm;
+  }
+
+  /* NOTE: Tailwind v4 cannot @apply another custom component class, so each
+     variant spells out the shared button utilities explicitly. */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold
+           transition active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100;
+    min-height: 56px;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold
+           transition active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100
+           bg-brand-700 text-white hover:bg-brand-800;
+    min-height: 56px;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold
+           transition active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100
+           bg-white text-brand-800 border-2 border-brand-700/30 hover:bg-brand-50;
+    min-height: 56px;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold
+           transition active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100
+           bg-black/5 text-ink-700 hover:bg-black/10;
+    min-height: 56px;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3 font-semibold
+           transition active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100
+           bg-white text-danger border-2 border-danger/30 hover:bg-danger/5;
+    min-height: 56px;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border-2 border-black/10 bg-white px-4 py-3 text-ink-900
+           placeholder:text-ink-300 focus:border-brand-600 focus:outline-none;
+    min-height: 56px;
+  }
+
+  .label {
+    @apply block text-base font-semibold text-ink-700 mb-2;
+  }
+
+  .hint {
+    @apply text-sm text-ink-500;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-base font-semibold;
+    min-height: 48px;
+  }
+
+  .chip-on {
+    @apply inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-base font-semibold
+           border-brand-700 bg-brand-700 text-white;
+    min-height: 48px;
+  }
+
+  .chip-off {
+    @apply inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-base font-semibold
+           border-black/15 bg-white text-ink-700;
+    min-height: 48px;
+  }
+
+  .section {
+    @apply bg-white rounded-2xl border border-black/5 shadow-sm p-5 mb-4;
+  }
+
+  .section-title {
+    @apply flex items-center gap-2 text-xl font-bold text-ink-900 mb-1;
+  }
+}
+
+/* Bottom navigation is inset from the iOS home indicator. */
+.pb-nav {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Hide scrollbars on the horizontal trade picker. */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
