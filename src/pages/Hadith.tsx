@@ -87,6 +87,7 @@ function HadithCard({
 function CollectionView({ collectionId }: { collectionId: string }) {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === 'rtl';
+  const language = i18n.language;
   const navigate = useNavigate();
   const [pack, setPack] = useState<HadithPack | null>(null);
   const [loading, setLoading] = useState(true);
@@ -171,6 +172,12 @@ function CollectionView({ collectionId }: { collectionId: string }) {
       <Notice tone="warning" title={t('common.provenance')}>
         {t('hadith.gradeDisclaimer')}
       </Notice>
+
+      {language === 'fr' ? (
+        <Notice tone="info" icon={<Info className="h-4 w-4" aria-hidden />}>
+          {t('hadith.translationAvailability')}
+        </Notice>
+      ) : null}
 
       {summary ? (
         <Notice tone="info">

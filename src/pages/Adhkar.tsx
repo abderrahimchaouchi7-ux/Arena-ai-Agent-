@@ -149,7 +149,8 @@ function MorningEveningList({ period }: { period: 'morning' | 'evening' }) {
 }
 
 function GroupView({ groupId }: { groupId: string }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const language = i18n.language;
   const group = ADHKAR_GROUPS.find((g) => g.id === groupId);
   const categories = adhkarCategories.filter((c) => adhkarGroupOf(c) === groupId);
   const items = categories.flatMap((c) => c.items.map((item) => ({ item, category: c })));
@@ -165,6 +166,10 @@ function GroupView({ groupId }: { groupId: string }) {
   return (
     <div className="space-y-3">
       <Notice tone="info" title={t('common.provenance')}>{t('dua.provenance')}</Notice>
+
+      {language === 'fr' ? (
+        <Notice tone="info">{t('hadith.translationAvailability')}</Notice>
+      ) : null}
       {items.map(({ item, category }) => (
         <Card key={item.id}>
           <p className="mb-2 text-xs font-semibold text-accent">

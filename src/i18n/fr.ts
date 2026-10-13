@@ -338,6 +338,8 @@ const fr: TranslationKeys = {
       'Cet appareil contient {{count}} hadiths sélectionnés de ce recueil, issus des premiers chapitres. Le recueil complet en contient {{total}}.',
     gradeDisclaimer:
       'Cette application n’affiche pas de degré d’authenticité par hadith, car le mainteneur du jeu de données source documente ces champs comme peu fiables. Le Sahih al-Bukhari et le Sahih Muslim sont reconnus authentiques en tant que recueils par consensus des savants ; pour les Sunan, vérifiez chaque narration auprès d’un savant qualifié ou d’une édition critique.',
+    translationAvailability:
+      'Arabe et anglais uniquement. Aucune traduction française de cette source n’existe sous licence permissive, et cette application ne traduit pas automatiquement les textes religieux : l’interface française affiche donc l’arabe original avec sa traduction anglaise.',
     repeatsPrevious:
       'Le texte est identique à la narration précédente ; seule la chaîne de transmission diffère.',
     numberRange: 'Numéroté {{label}} dans cette édition',

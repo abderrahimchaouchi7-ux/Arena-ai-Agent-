@@ -332,6 +332,8 @@ const en = {
       'This device holds {{count}} selected hadiths from this collection, taken from the opening chapters. The full collection holds {{total}}.',
     gradeDisclaimer:
       'This app does not display per-hadith authenticity grades, because the upstream dataset\u2019s maintainer documents those grade fields as unreliable. Sahih al-Bukhari and Sahih Muslim are accepted as authentic as collections by scholarly consensus; for the Sunan, verify individual narrations with a qualified scholar or a critical edition.',
+    translationAvailability:
+      'Arabic and English only. No permissively licensed French translation of this source exists, and this app does not machine-translate religious text, so the French interface still shows the original Arabic with its English translation.',
     repeatsPrevious: 'The wording is identical to the preceding narration; only the chain differs.',
     numberRange: 'Numbered {{label}} in this edition',
     noResults: 'No hadith matched your search.',
