@@ -6,6 +6,11 @@ name: Android build
 # SDK, and cannot reach dl.google.com or services.gradle.org, so the APK cannot
 # be produced there. These runners have all three, which makes this the only
 # honest way to ship an actual artefact rather than claiming one exists.
+#
+# Diagnostic note: this repo's job logs are stored on a blob host that is not
+# reachable from the authoring sandbox, so logs cannot be read there. Every
+# step that can fail therefore emits an ::error:: annotation carrying the
+# relevant detail, because annotations ARE readable through the API.
 
 on:
   workflow_dispatch:
@@ -53,15 +58,44 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      # AGP 8.2.1 requires JDK 17 specifically.
+      # AGP 8.2.1 requires JDK 17.
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # The ubuntu-latest runner image already ships the Android SDK with
+      # ANDROID_HOME set, so no third-party setup action is used: the previous
+      # android-actions/setup-android@v3 step failed outright. This verifies the
+      # preinstalled SDK and reports exactly what is missing if it is not there.
+      - name: Verify the preinstalled Android SDK
+        run: |
+          set -uo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-<unset>}"
+          echo "ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT:-<unset>}"
+          java -version 2>&1 | head -2
+          ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}"
+          if [ -z "$ROOT" ] || [ ! -d "$ROOT" ]; then
+            echo "::error::No Android SDK found. ANDROID_HOME='${ANDROID_HOME:-}'"
+            exit 1
+          fi
+          echo "--- installed platforms ---"
+          ls "$ROOT/platforms" 2>/dev/null || echo "(none)"
+          echo "--- installed build-tools ---"
+          ls "$ROOT/build-tools" 2>/dev/null || echo "(none)"
+          # compileSdkVersion is 34; make sure that platform is present.
+          if [ ! -d "$ROOT/platforms/android-34" ]; then
+            echo "platform android-34 missing; installing"
+            yes | "$ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+            "$ROOT/cmdline-tools/latest/bin/sdkmanager" "platforms;android-34" "build-tools;34.0.0" \
+              || echo "::error::sdkmanager could not install platforms;android-34"
+          fi
+          if [ ! -d "$ROOT/platforms/android-34" ]; then
+            echo "::error::platforms;android-34 is required but unavailable"
+            exit 1
+          fi
+          echo "SDK OK at $ROOT"
 
       - name: Install the exact locked dependency tree
         run: npm ci
@@ -69,15 +103,35 @@ jobs:
       # Gates the build on the religious content being complete and correctly
       # attributed. A partial Quran or an unsourced du'a must fail the build.
       - name: Verify bundled content
-        run: npm run data:verify
+        run: |
+          if ! npm run data:verify; then
+            echo "::error::Content verification failed — refusing to package an incomplete Quran or unsourced content"
+            exit 1
+          fi
 
       - name: Typecheck and build the web bundle
-        run: npm run build
+        run: |
+          if ! npm run build; then
+            echo "::error::Web build or typecheck failed"
+            exit 1
+          fi
+          if [ ! -f dist/index.html ]; then
+            echo "::error::Build reported success but dist/index.html is missing"
+            exit 1
+          fi
 
       # Regenerates android/app/src/main/assets/public, which is gitignored
       # build output and therefore absent from a fresh checkout.
       - name: Sync web assets and plugins into the Android project
-        run: npx cap sync android
+        run: |
+          if ! npx cap sync android; then
+            echo "::error::cap sync android failed"
+            exit 1
+          fi
+          if [ ! -f android/app/src/main/assets/public/index.html ]; then
+            echo "::error::cap sync ran but the web assets were not copied into the Android project"
+            exit 1
+          fi
 
       - name: Grant the Gradle wrapper the executable bit
         run: chmod +x android/gradlew
@@ -95,14 +149,25 @@ jobs:
       # build.gradle falls back to the debug keystore and logs a warning.
       - name: Assemble the debug APK
         working-directory: android
-        run: ./gradlew --no-daemon --stacktrace assembleDebug
+        run: |
+          set -o pipefail
+          # tee to a file so the tail can be surfaced as an annotation, since
+          # the raw job logs are not reachable from the authoring sandbox.
+          ./gradlew --no-daemon --stacktrace assembleDebug 2>&1 | tee /tmp/gradle.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            # Annotation text must stay on one line to be readable.
+            tail -40 /tmp/gradle.log | tr '\n' ' ' | sed 's/  */ /g' \
+              | sed 's/^/::error::Gradle assembleDebug failed (exit '"$status"'): /'
+            exit "$status"
+          fi
 
       - name: Locate the APK
         id: apk
         run: |
           APK=$(find android/app/build/outputs/apk -name '*.apk' | head -1)
           if [ -z "$APK" ]; then
-            echo "::error::Gradle reported success but produced no APK"
+            echo "::error::Gradle reported success but produced no APK under android/app/build/outputs/apk"
             exit 1
           fi
           echo "path=$APK" >> "$GITHUB_OUTPUT"
@@ -110,6 +175,7 @@ jobs:
           echo "sha256=$(sha256sum "$APK" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
           echo "size=$(du -h "$APK" | cut -f1)" >> "$GITHUB_OUTPUT"
           ls -lh "$APK"
+          echo "Built $APK"
 
       - name: Upload the APK as a workflow artifact
         uses: actions/upload-artifact@v4
