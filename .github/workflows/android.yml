@@ -185,8 +185,12 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      # On a push there is no `inputs` context, so `inputs.publish_release`
+      # is empty and coerces to false — the original condition skipped the
+      # release on every push-triggered build. Publish unless a manual run
+      # explicitly opts out.
       - name: Publish to a GitHub Release
-        if: ${{ inputs.publish_release != false }}
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.publish_release != false }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
