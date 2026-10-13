@@ -23,7 +23,7 @@ Gradle and no Android SDK** — so no APK was built, signed or tested. See point
 | 12 | The Android build is documented | `docs/ANDROID.md` | **Pass** — project present; **no APK built, signed or tested** |
 | 13 | Accessibility, empty and error states | `npm test` → *accessibility and states* | **Pass** — skip link, landmarks, named controls, no emoji in nav |
 | 14 | No decorative placeholders | `npm test` + `npm run data:verify` | **Pass** — unavailable sources report honestly |
-| 15 | Type-safe and tested | `npm run typecheck && npm test` | **Pass** — `tsc` 0 errors; 169/169 tests |
+| 15 | Type-safe and tested | `npm run typecheck && npm test` | **Pass** — `tsc` 0 errors; 173/173 tests |
 
 ---
 
@@ -168,7 +168,7 @@ when it is not.
 
 ```bash
 npm run typecheck   # tsc --noEmit → 0 errors
-npm test            # 169 passed (8 files)
+npm test            # 173 passed (9 files)
 npm run build       # succeeds; dist/ + service worker emitted
 ```
 
@@ -184,5 +184,5 @@ npm test
 npm run build
 ```
 
-Expected: **13/13 PASS**, **0 TypeScript errors**, **169 tests passed**, and a
+Expected: **13/13 PASS**, **0 TypeScript errors**, **173 tests passed**, and a
 clean production build with a generated service worker.

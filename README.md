@@ -22,7 +22,7 @@ Other commands:
 | --- | --- |
 | `npm run build` | `tsc --noEmit` then a production build to `dist/` |
 | `npm run preview` | Serve the built bundle locally |
-| `npm test` | 169 unit + journey tests (Vitest + Testing Library) |
+| `npm test` | 173 unit + journey tests (Vitest + Testing Library) |
 | `npm run typecheck` | TypeScript, strict, no emit |
 | `npm run data:build` | Rebuild `src/data/generated/` from pinned upstream sources |
 | `npm run data:verify` | Release-gating content assertions |
@@ -115,7 +115,7 @@ counts, tashkeel on every verse, 1:1 script alignment, translation coverage,
 mushaf index completeness, a source reference on every adhkar item, the hadith
 grading disclaimer, and pinned upstream commits. **Current result: 13/13 PASS.**
 
-`npm test` runs 169 tests: prayer-time and Qibla maths, Hijri conversion, data
+`npm test` runs 173 tests: prayer-time and Qibla maths, Hijri conversion, data
 integrity, translation key parity across all three languages, search, clipboard
 and share fallbacks, and 18 journey tests that render the real app and drive
 navigation, language switching, theme persistence and bookmarks.
