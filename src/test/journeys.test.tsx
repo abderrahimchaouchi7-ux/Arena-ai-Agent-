@@ -77,17 +77,26 @@ describe('navigation', () => {
 
   it('shows the not-found page for an unknown route', async () => {
     await renderAt('/does-not-exist');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
-    expect(screen.getByRole('main').textContent).toMatch(/not found|404|لم|introuvable/i);
+    // The <main> landmark belongs to the shell and exists immediately, so
+    // waiting for it proves nothing. The assertion has to live *inside* the
+    // wait, or it reads the Suspense fallback's empty text while the lazy 404
+    // chunk is still loading — which is what made this test flaky.
+    await waitFor(() => {
+      expect(screen.getByRole('main').textContent).toMatch(/not found|404|لم|introuvable/i);
+    });
   });
 
   it('navigates from the home dashboard to prayer times', async () => {
     await renderAt('/');
-    const main = screen.getByRole('main');
-    const link = within(main)
-      .getAllByRole('link')
-      .find((el) => (el.getAttribute('href') ?? '').includes('prayer-times'));
-    expect(link, 'home links to prayer times').toBeDefined();
+    // renderAt only guarantees that *a* link exists, which the sidebar already
+    // satisfies; wait for the dashboard's own content to render first.
+    let link: HTMLElement | undefined;
+    await waitFor(() => {
+      link = within(screen.getByRole('main'))
+        .getAllByRole('link')
+        .find((el) => (el.getAttribute('href') ?? '').includes('prayer-times'));
+      expect(link, 'home links to prayer times').toBeDefined();
+    });
     act(() => {
       fireEvent.click(link!);
     });
@@ -207,8 +216,11 @@ describe('language and theme persistence', () => {
 describe('bookmarks journey', () => {
   it('shows an empty state before anything is saved', async () => {
     await renderAt('/bookmarks');
-    await waitFor(() => expect(screen.getByRole('main')).toBeInTheDocument());
-    expect(screen.getByRole('main').textContent?.trim().length).toBeGreaterThan(0);
+    // Assert inside the wait — <main> is part of the shell and is present
+    // before the lazy Bookmarks chunk resolves.
+    await waitFor(() => {
+      expect(screen.getByRole('main').textContent?.trim().length).toBeGreaterThan(0);
+    });
   });
 
   it('lists a bookmark after it is saved', async () => {

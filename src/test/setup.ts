@@ -16,6 +16,18 @@ configure({ asyncUtilTimeout: 10000 });
 
 afterEach(() => {
   cleanup();
+  /**
+   * Several suites drive the persisted settings store, which writes
+   * `nur-settings` to localStorage. Vitest does not guarantee test-file order
+   * or isolation of the jsdom storage area, so a file that leaves the language
+   * on French can change what the next file renders. Clear it every time so
+   * each test starts from the real defaults.
+   */
+  try {
+    localStorage.clear();
+  } catch {
+    // localStorage can throw in restricted environments; nothing to clean up.
+  }
 });
 
 // jsdom implements neither of these; stub them so components that reference
